@@ -6,15 +6,11 @@ import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import lombok.Getter;
 import lombok.val;
 import model.Game;
-import model.SnakeBodyPart;
 import utils.Config;
-import utils.Utils;
 
 import java.util.Optional;
 import java.util.Timer;
@@ -88,8 +84,6 @@ public class View extends Group {
         gameTimer.cancel();
         animationTimer.stop();
 
-        stage.hide();
-
         val alert = new Alert(Alert.AlertType.CONFIRMATION);
 
         val message = String.format(snakeIsDead
@@ -143,7 +137,7 @@ public class View extends Group {
         val map = game.getCurrentLevel().getMap();
         val size = Config.GAME_OBJECT_SIZE;
         val graphicsContext = canvas.getGraphicsContext2D();
-        val textureGetter = new TextureGetter(game);
+        val textureGetter = new TextureManager(game);
         val width = map.getWidth();
         val height = map.getHeight();
 

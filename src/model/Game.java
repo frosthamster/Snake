@@ -11,6 +11,8 @@ import java.util.Random;
 public class Game {
     @Getter
     private int iteration;
+    @Getter
+    private int applesEatenCount;
     private final ArrayList<Level> levels;
     @Getter
     private Level currentLevel;
@@ -29,7 +31,6 @@ public class Game {
     }
 
 
-
     private void notifyChangeLevel(int levelNumber) {
         for (val handler : changeLevelHandlers)
             handler.onLevelChanged(levelNumber);
@@ -43,6 +44,7 @@ public class Game {
     public void refreshGame(boolean startOver) {
         currentLevelNumber = startOver ? 0 : currentLevelNumber;
         currentLevel = LevelGenerator.getLevel(currentLevelNumber);
+        applesEatenCount = 0;
         iteration = 0;
         subscribeToEvents(currentLevel);
         addAppleToMap();
@@ -65,11 +67,12 @@ public class Game {
         if (currentLevel.getSnakeHead().getLength() > currentLevel.getAppleCount())
             switchToNextLevel();
 
-        if (iteration % Config.MUSHROOM_ITERATION_PERIOD == 0) {
+        if (applesEatenCount % Config.MUSHROOM_ITERATION_PERIOD == 0) {
             addMushroomToMap();
-            iteration++;
+            applesEatenCount++;
         }
-
+        currentLevel.getTimeWatchers().forEach(e -> e.onTimeChanged(iteration, applesEatenCount));
+        iteration++;
     }
 
     private void addAppleToMap() {
@@ -79,7 +82,7 @@ public class Game {
             switchToNextLevel();
         else
             map.add(location.getX(), location.getY(), new Apple(map, location));
-        iteration++;
+        applesEatenCount++;
     }
 
     private void addMushroomToMap() {
@@ -117,7 +120,7 @@ public class Game {
             return;
         }
 
-        iteration = 0;
+        applesEatenCount = 0;
         currentLevelNumber++;
         currentLevel = levels.get(currentLevelNumber);
         addAppleToMap();

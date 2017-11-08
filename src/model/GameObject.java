@@ -55,7 +55,7 @@ public abstract class GameObject {
         return dx > 0 ? Direction.LEFT
                 : dx < 0 ? Direction.RIGHT
                 : dy > 0 ? Direction.UP
-                : Direction.DOWN;
+                 : Direction.DOWN;
     }
 
     @Override

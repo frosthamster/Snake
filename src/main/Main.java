@@ -16,6 +16,7 @@ import javafx.stage.Stage;
 import lombok.val;
 import model.Direction;
 import model.Game;
+import utils.Config;
 import view.View;
 import Menu.MainMenu;
 
@@ -47,13 +48,13 @@ public class Main extends Application {
                     if (view.isPaused())
                         view.resume();
 
-                    if (event.getCode() == KeyCode.RIGHT)
+                    if (event.getCode() == KeyCode.RIGHT || event.getCode() == KeyCode.D)
                         snake.rotate(Direction.RIGHT);
-                    else if (event.getCode() == KeyCode.LEFT)
+                    else if (event.getCode() == KeyCode.LEFT || event.getCode() == KeyCode.A)
                         snake.rotate(Direction.LEFT);
-                    else if (event.getCode() == KeyCode.UP)
+                    else if (event.getCode() == KeyCode.UP || event.getCode() == KeyCode.W)
                         snake.rotate(Direction.UP);
-                    else if (event.getCode() == KeyCode.DOWN)
+                    else if (event.getCode() == KeyCode.DOWN || event.getCode() == KeyCode.S)
                         snake.rotate(Direction.DOWN);
                     else if (event.getCode() == KeyCode.SHIFT)
                         view.pause();

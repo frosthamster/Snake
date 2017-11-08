@@ -12,44 +12,44 @@ public final class LevelGenerator {
     private static ArrayList<String> levels = new ArrayList<>();
 
     static {
-        levels.add(
-                "xxxxxxxxxxxxxxxxx\n" +
-                        "x.....x.........x\n" +
-                        "x.....x.........x\n" +
-                        "x.....xxxx..x...x\n" +
-                            "x...........x...x\n" +
-                        "x.s...x.....x...x\n" +
-                        "x.o...x.....x...x\n" +
-                        "xxxxxxxxxxxxxxxxx"
-        );
-        levels.add(
-                "xxxxxxxxxxxxxxxxx\n" +
-                        "x...............x\n" +
-                        "x..xxxx...xxxx..x\n" +
-                        "x...............x\n" +
-                        "x..xxxxxxxxxxx..x\n" +
-                        "x.s...x...x.....x\n" +
-                        "x.o.............x\n" +
-                        "xxxxxxxxxxxxxxxxx"
-        );
-        levels.add(
-                "xxxxxxxxxxxxxxxxx\n" +
-                        "x...............x\n" +
-                        "x.xxxxxxxx......x\n" +
-                        "x...............x\n" +
-                        "x....xxxxxxxxxxxx\n" +
-                        "x.s.............x\n" +
-                        "xxo....x........x\n" +
-                        "xxxxxxxxxxxxxxxxx"
-        );
+//        levels.add(
+//                "xxxxxxxxxxxxxxxxx\n" +
+//                        "x.....x.........x\n" +
+//                        "x.....x.........x\n" +
+//                        "x.....xxxx..x...x\n" +
+//                        "x...........x...x\n" +
+//                        "x.s...x.....x...x\n" +
+//                        "x.o...x.....x...x\n" +
+//                        "xxxxxxxxxxxxxxxxx"
+//        );
+//        levels.add(
+//                "xxxxxxxxxxxxxxxxx\n" +
+//                        "x...............x\n" +
+//                        "x..xxxx...xxxx..x\n" +
+//                        "x...............x\n" +
+//                        "x..xxxxxxxxxxx..x\n" +
+//                        "x.s...x...x.....x\n" +
+//                        "x.o.............x\n" +
+//                        "xxxxxxxxxxxxxxxxx"
+//        );
+//        levels.add(
+//                "xxxxxxxxxxxxxxxxx\n" +
+//                        "x...............x\n" +
+//                        "x.xxxxxxxx......x\n" +
+//                        "x...............x\n" +
+//                        "x....xxxxxxxxxxxx\n" +
+//                        "x.s.............x\n" +
+//                        "xxo....x........x\n" +
+//                        "xxxxxxxxxxxxxxxxx"
+//        );
         levels.add(
                 "xxxxxxxxxxxxxxxxxxxxxxxxxx\n" +
-                        "x........................x\n" +
-                        "x........................x\n" +
-                        "x....1...................x\n" +
-                        "x........................x\n" +
-                        "x........................x\n" +
-                        "x........................x\n" +
+                        "x...............#........x\n" +
+                        "x...............#........x\n" +
+                        "x....1..........#........x\n" +
+                        "x...............#........x\n" +
+                        "x...............#........x\n" +
+                        "x...............#........x\n" +
                         "x........................x\n" +
                         "x...............1........x\n" +
                         "x....s...................x\n" +
@@ -77,6 +77,8 @@ public final class LevelGenerator {
                     result.add(j, i, new Space(result, new Point(j, i)));
                 else if (currentChar == 'x')
                     result.add(j, i, new Wall(result, new Point(j, i)));
+                else if (currentChar == '#')
+                    result.add(j, i, new ShadowWall(result, new Point(j, i)));
                 else if (currentChar == 's') {
                     result.add(j, i, new SnakeHead(result, new Point(j, i)));
                     snakeHeadCount++;

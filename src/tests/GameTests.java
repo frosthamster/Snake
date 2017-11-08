@@ -37,6 +37,28 @@ public class GameTests {
     }
 
     @Test
+    public void portalTest() {
+        map.add(5, 4, new Portal(map, new Point(5, 4), 1));
+        map.add(7, 4, new Portal(map, new Point(7, 4), 1));
+        Portal.connectPortals((Portal) map.get(5, 4), (Portal) map.get(7, 4));
+        snakeHead.move();
+        Assert.assertEquals(snakeHead, map.get(7, 3));
+    }
+
+    @Test
+    public void nestedPortalsTest() {
+        map.add(5, 4, new Portal(map, new Point(5, 4), 1));
+        map.add(7, 4, new Portal(map, new Point(7, 4), 1));
+        Portal.connectPortals((Portal) map.get(5, 4), (Portal) map.get(7, 4));
+        map.add(7, 3, new Portal(map, new Point(7, 3), 2));
+        map.add(9, 4, new Portal(map, new Point(9, 4), 2));
+        Portal.connectPortals((Portal) map.get(7, 3), (Portal) map.get(9, 4));
+        snakeHead.move();
+        Assert.assertEquals(snakeHead, map.get(9, 3));
+    }
+
+
+    @Test
     public void oneStepTest() {
         snakeHead.move();
         Assert.assertEquals(snakeHead, map.get(5, 4));
@@ -142,10 +164,23 @@ public class GameTests {
         gameMap.add(startAppleLocation, new Space(gameMap, startAppleLocation));
 
         val snake = game.getCurrentLevel().getSnakeHead();
-        val appleLocation = new Point(snake.getLocation().getX(),snake.getLocation().getY() - 1);
+        val appleLocation = new Point(snake.getLocation().getX(), snake.getLocation().getY() - 1);
         gameMap.add(appleLocation, new Apple(gameMap, appleLocation));
         game.makeGameIteration();
         Assert.assertEquals(3, snake.getLength());
         Assert.assertTrue(gameMap.findFirst(Apple.class) != null);
+    }
+
+    @Test
+    public void mushroomTests() {
+        map.add(5, 4, new Mushroom(map, new Point(5, 4)));
+        map.add(5, 3, new Wall(map, new Point(5, 3)));
+        boolean[] handled = {false};
+        snakeHead.addThrewBackTailHandler(() -> handled[0] = true);
+        snakeHead.move();
+        Assert.assertTrue(((SnakeBodyPart) map.get(5, 6)).isSafePart());
+        snakeHead.move();
+        Assert.assertTrue(handled[0]);
+        Assert.assertTrue(map.get(5, 6) instanceof Space);
     }
 }
