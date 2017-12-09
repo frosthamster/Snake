@@ -5,7 +5,6 @@ import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -14,8 +13,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import lombok.val;
-import model.Direction;
-import model.Game;
+import model.*;
 import utils.Config;
 import view.View;
 import Menu.MainMenu;
@@ -38,6 +36,14 @@ public class Main extends Application {
     }
 
     private void playSnake(int difficulty){
+        val builder = new LevelBuilder(15, 30);
+        builder.add(6,3,  SnakeHead.class);
+        builder.add(7,3,  SnakeBodyPart.class);
+        builder.add(0,0, Wall.class);
+        builder.add(10, 5, Portal.class);
+        builder.add(10, 10, Portal.class);
+        LevelGenerator.addLevel(builder.getLevelRepresentation());
+
         val game = new Game(difficulty);
         val view = new View(game, theStage);
         val scene = new Scene(view);
@@ -78,7 +84,7 @@ public class Main extends Application {
                 )
         );
         val mainMenu = new MainMenu();
-        mainMenu.getMenuButtons().get("play").setOnMouseClicked(e -> playSnake(4));
+        mainMenu.getMenuButtons().get("play").setOnMouseClicked(e -> playSnake(Config.DIFFICULTY));
         root.getChildren().add(mainMenu);
         return root;
     }

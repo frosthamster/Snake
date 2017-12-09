@@ -1,5 +1,6 @@
 package Menu;
 
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -16,10 +17,9 @@ public class MainMenu extends StackPane {
     public MainMenu(){
         val play = new Button("play");
         play.setPrefSize(50, 50);
-        val pane = new StackPane();
-        pane.getChildren().add(play);
         menuButtons = new HashMap<>();
         menuButtons.put("play", play);
-        getChildren().add(pane);
+        getChildren().add(play);
+        //setAlignment(Pos.BOTTOM_CENTER);
     }
 }

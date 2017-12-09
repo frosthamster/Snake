@@ -21,19 +21,20 @@ class TextureManager {
         put(ShadowWall.class, new Image("shadowWall.png"));
         put(Space.class, new Image("space.png"));
         put(Mushroom.class, new Image("mushroom.png"));
-        put(Portal.class, new Image("portal.png"));
     }};
 
     private Map<GameObject, Image> dynamicTextures = new HashMap<>();
 
-    TextureManager(Game game) {
-        fillDynamicTextures(game);
+    TextureManager(Game game, int animationIterationCount) {
+        fillDynamicTextures(game, animationIterationCount);
     }
 
-    private void fillDynamicTextures(Game game) {
+    private void fillDynamicTextures(Game game, int animationIterationCount) {
         val snakeHead = game.getCurrentLevel().getSnakeHead();
         val snakeBody = snakeHead.getBody();
         val lastSnakeBodyPart = snakeBody.getLast();
+        staticTextures.put(Portal.class, rotate(new Image("portal.png"), animationIterationCount));
+
 
         //HEAD
         dynamicTextures.put(snakeHead, getRotatedImage("Head", false, snakeHead.getDirection(),

@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 public class SnakeHead extends SnakePart {
-
+    public static final Character representation = 's';
     @Getter
     private Direction direction = Direction.UP;
     private ArrayList<SnakeDeathHandler> deathHandlers = new ArrayList<>();

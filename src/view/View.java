@@ -24,6 +24,7 @@ public class View extends Group {
     private Timer gameTimer = new Timer();
     private AnimationTimer animationTimer;
     private Stage stage;
+    private int animationIterationCount = 0;
 
     public View(Game game, Stage stage) {
         this.game = game;
@@ -134,13 +135,13 @@ public class View extends Group {
     }
 
     private void animationTimerTick() {
+        animationIterationCount++;
         val map = game.getCurrentLevel().getMap();
         val size = Config.GAME_OBJECT_SIZE;
         val graphicsContext = canvas.getGraphicsContext2D();
-        val textureGetter = new TextureManager(game);
+        val textureGetter = new TextureManager(game, animationIterationCount);
         val width = map.getWidth();
         val height = map.getHeight();
-
 
         val grass = new Image("space.png");
 

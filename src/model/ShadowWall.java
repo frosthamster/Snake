@@ -5,6 +5,7 @@ import lombok.val;
 import utils.Point;
 
 public class ShadowWall extends GameObject implements TimeWatcher {
+    public static final Character representation = '#';
     public ShadowWall(Map map, Point location) {
         super(map, location);
     }

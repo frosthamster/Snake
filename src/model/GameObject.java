@@ -8,6 +8,7 @@ import utils.Utils;
 public abstract class GameObject {
     protected Map map;
     @Getter protected Point location;
+    public static final Character representation = '?';
 
     public GameObject(Map map, Point location) {
         this.map = map;

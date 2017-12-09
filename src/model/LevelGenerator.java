@@ -1,5 +1,6 @@
 package model;
 
+import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.val;
 import utils.Config;
@@ -9,20 +10,21 @@ import utils.Utils;
 import java.util.ArrayList;
 
 public final class LevelGenerator {
-    private static ArrayList<String> levels = new ArrayList<>();
+    private static ArrayList<String> levelsRepresentations = new ArrayList<>();
+    @Getter private static ArrayList<Level> levels = new ArrayList<>();
 
     static {
-//        levels.add(
+//        levelsRepresentations.add(
 //                "xxxxxxxxxxxxxxxxx\n" +
 //                        "x.....x.........x\n" +
 //                        "x.....x.........x\n" +
-//                        "x.....xxxx..x...x\n" +
+//                        "x.....xxxx##x...x\n" +
 //                        "x...........x...x\n" +
 //                        "x.s...x.....x...x\n" +
 //                        "x.o...x.....x...x\n" +
 //                        "xxxxxxxxxxxxxxxxx"
 //        );
-//        levels.add(
+//        levelsRepresentations.add(
 //                "xxxxxxxxxxxxxxxxx\n" +
 //                        "x...............x\n" +
 //                        "x..xxxx...xxxx..x\n" +
@@ -32,7 +34,7 @@ public final class LevelGenerator {
 //                        "x.o.............x\n" +
 //                        "xxxxxxxxxxxxxxxxx"
 //        );
-//        levels.add(
+//        levelsRepresentations.add(
 //                "xxxxxxxxxxxxxxxxx\n" +
 //                        "x...............x\n" +
 //                        "x.xxxxxxxx......x\n" +
@@ -42,20 +44,23 @@ public final class LevelGenerator {
 //                        "xxo....x........x\n" +
 //                        "xxxxxxxxxxxxxxxxx"
 //        );
-        levels.add(
-                "xxxxxxxxxxxxxxxxxxxxxxxxxx\n" +
-                        "x...............#........x\n" +
-                        "x...............#........x\n" +
-                        "x....1..........#........x\n" +
-                        "x...............#........x\n" +
-                        "x...............#........x\n" +
-                        "x...............#........x\n" +
-                        "x........................x\n" +
-                        "x...............1........x\n" +
-                        "x....s...................x\n" +
-                        "x....o...................x\n" +
-                        "xxxxxxxxxxxxxxxxxxxxxxxxxx"
-        );
+//        levelsRepresentations.add(
+//                "xxxxxxxxxxxxxxxxxxxxxxxxxx\n" +
+//                        "x...............#........x\n" +
+//                        "x...............#........x\n" +
+//                        "x....1..........#........x\n" +
+//                        "x...............#........x\n" +
+//                        "x...............#........x\n" +
+//                        "x...............#........x\n" +
+//                        "x........................x\n" +
+//                        "x...............1........x\n" +
+//                        "x....s...................x\n" +
+//                        "x....o...................x\n" +
+//                        "xxxxxxxxxxxxxxxxxxxxxxxxxx"
+//        );
+
+        for (int i = 0; i < levelsRepresentations.size(); i++)
+            levels.add(getLevel(i));
     }
 
     @SneakyThrows
@@ -73,18 +78,18 @@ public final class LevelGenerator {
 
             for (int j = 0; j < lines[i].length(); j++) {
                 val currentChar = lines[i].toLowerCase().charAt(j);
-                if (currentChar == '.')
+                if (currentChar == Space.representation)
                     result.add(j, i, new Space(result, new Point(j, i)));
-                else if (currentChar == 'x')
+                else if (currentChar == Wall.representation)
                     result.add(j, i, new Wall(result, new Point(j, i)));
-                else if (currentChar == '#')
+                else if (currentChar == ShadowWall.representation)
                     result.add(j, i, new ShadowWall(result, new Point(j, i)));
-                else if (currentChar == 's') {
+                else if (currentChar == SnakeHead.representation) {
                     result.add(j, i, new SnakeHead(result, new Point(j, i)));
                     snakeHeadCount++;
-                } else if (currentChar == '@')
+                } else if (currentChar == Apple.representation)
                     result.add(j, i, new Apple(result, new Point(j, i)));
-                else if (currentChar == 'o') {
+                else if (currentChar == SnakeBodyPart.representation) {
                     result.add(j, i, new SnakeBodyPart(result, new Point(j, i), false));
                     snakeBodyCount++;
                 } else if (Utils.tryParseChar(currentChar)) {
@@ -97,25 +102,23 @@ public final class LevelGenerator {
             }
         }
         if (snakeBodyCount != 1 || snakeHeadCount != 1)
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("At start there should be 1 head and 1 body");
         portalManager.connectPortals();
         return result;
     }
 
-    public static ArrayList<Level> getLevels() {
-        val result = new ArrayList<Level>();
-        for (int i = 0; i < levels.size(); i++)
-            result.add(getLevel(i));
-        return result;
+    public static void addLevel(String levelRepresentation){
+        levelsRepresentations.add(levelRepresentation);
+        levels.add(getLevel(levels.size()));
     }
 
     public static Level getLevel(int number) {
-        val map = parseLevel(levels.get(number));
+        val map = parseLevel(levelsRepresentations.get(number));
         val snake = (SnakeHead) map.findFirst(SnakeHead.class);
         val snakeBody = (SnakeBodyPart) map.findFirst(SnakeBodyPart.class);
 
         if (!snake.isNeighbor(snakeBody))
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Body is not in contact with head");
 
         snake.getBody().add(snakeBody);
         return new Level(map, snake, Config.getApplesCount(number));
