@@ -111,11 +111,7 @@ public final class Utils {
     }};
 
     public static boolean tryParseChar(Character value){
-        try {
-            Character.getNumericValue(value);
-            return true;
-        } catch (NumberFormatException e){
-            return false;
-        }
+        val code =  (int)value;
+        return code >= 48 && code <= 57;
     }
 }

@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 public class SnakeHead extends SnakePart {
-
+    public static final Character representation = 's';
     @Getter
     private Direction direction = Direction.UP;
     private ArrayList<SnakeDeathHandler> deathHandlers = new ArrayList<>();
@@ -55,6 +55,7 @@ public class SnakeHead extends SnakePart {
         movementHandlers.put(SnakeBodyPart.class, this::moveToSnakeBodyPart);
         movementHandlers.put(Space.class, this::moveToSpace);
         movementHandlers.put(Mushroom.class, this::moveToMushroom);
+        movementHandlers.put(ShadowWall.class, this::moveToShadowWall);
     }
 
     public void rotate(Direction direction) {
@@ -93,6 +94,10 @@ public class SnakeHead extends SnakePart {
     }
 
     private void moveToWall(GameObject wall) {
+        tryDie();
+    }
+
+    private void moveToShadowWall(GameObject wall) {
         tryDie();
     }
 

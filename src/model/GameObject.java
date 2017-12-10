@@ -8,6 +8,7 @@ import utils.Utils;
 public abstract class GameObject {
     protected Map map;
     @Getter protected Point location;
+    public static final Character representation = '?';
 
     public GameObject(Map map, Point location) {
         this.map = map;
@@ -55,7 +56,7 @@ public abstract class GameObject {
         return dx > 0 ? Direction.LEFT
                 : dx < 0 ? Direction.RIGHT
                 : dy > 0 ? Direction.UP
-                : Direction.DOWN;
+                 : Direction.DOWN;
     }
 
     @Override

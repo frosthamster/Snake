@@ -2,14 +2,22 @@ package model;
 
 import lombok.Getter;
 
-public class Level {
-    @Getter private Map map;
-    @Getter private SnakeHead snakeHead;
-    @Getter private int appleCount;
+import java.util.ArrayList;
 
-    public Level(Map map, SnakeHead snakeHead, int appleCount){
+public class Level {
+    @Getter
+    private Map map;
+    @Getter
+    private SnakeHead snakeHead;
+    @Getter
+    private int appleCount;
+    @Getter
+    private ArrayList<TimeWatcher> timeWatchers = new ArrayList<>();
+
+    public Level(Map map, SnakeHead snakeHead, int appleCount) {
         this.map = map;
         this.snakeHead = snakeHead;
         this.appleCount = appleCount;
+        map.toStream().filter(e -> e instanceof TimeWatcher).forEach(e -> timeWatchers.add((TimeWatcher) e));
     }
 }

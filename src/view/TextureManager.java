@@ -1,6 +1,5 @@
 package view;
 
-import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -8,38 +7,34 @@ import javafx.scene.paint.Color;
 import javafx.util.Pair;
 import lombok.val;
 import model.*;
-import utils.Config;
 import utils.Utils;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
-class TextureGetter {
+class TextureManager {
     private static String snakeColor = "blue";
 
     private final static Map<Class, Image> staticTextures = new HashMap<Class, Image>() {{
         put(Apple.class, new Image("apple.png"));
         put(Wall.class, new Image("wall.png"));
+        put(ShadowWall.class, new Image("shadowWall.png"));
         put(Space.class, new Image("space.png"));
         put(Mushroom.class, new Image("mushroom.png"));
-        put(Portal.class, new Image("portal.png"));
     }};
 
     private Map<GameObject, Image> dynamicTextures = new HashMap<>();
 
-    TextureGetter(Game game) {
-        fillDynamicTextures(game);
+    TextureManager(Game game, int animationIterationCount) {
+        fillDynamicTextures(game, animationIterationCount);
     }
 
-    private void fillDynamicTextures(Game game) {
+    private void fillDynamicTextures(Game game, int animationIterationCount) {
         val snakeHead = game.getCurrentLevel().getSnakeHead();
         val snakeBody = snakeHead.getBody();
         val lastSnakeBodyPart = snakeBody.getLast();
+        staticTextures.put(Portal.class, rotate(new Image("portal.png"), animationIterationCount));
+
 
         //HEAD
         dynamicTextures.put(snakeHead, getRotatedImage("Head", false, snakeHead.getDirection(),
@@ -68,8 +63,8 @@ class TextureGetter {
         //TAIL
         dynamicTextures.put(snakeBody.getFirst(), getRotatedImage("Tail", snakeBody.getFirst().isSafePart(),
                 snakeBody.getFirst().getDirectionTo(
-                snakeBody.size() > 1 ? snakeBody.get(1) : snakeHead
-        ), null));
+                        snakeBody.size() > 1 ? snakeBody.get(1) : snakeHead
+                ), null));
     }
 
     private Image getRotatedImage(String bodyPartsVarieties, boolean isSafeBodyPart,
@@ -115,16 +110,5 @@ class TextureGetter {
         return staticTextures.containsKey(gameObject.getClass())
                 ? staticTextures.get(gameObject.getClass())
                 : dynamicTextures.get(gameObject);
-    }
-
-    //TODO debug function
-    public static void saveToFile(Image image) {
-        File outputFile = new File("image.png");
-        BufferedImage bImage = SwingFXUtils.fromFXImage(image, null);
-        try {
-            ImageIO.write(bImage, "png", outputFile);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 }

@@ -11,18 +11,16 @@ class SnakePart extends GameObject {
 
     @Override
     public Direction getDirectionTo(GameObject other) {
-        if (!(other instanceof SnakePart))
+        if (!(other instanceof SnakePart) || isNeighbor(other))
             return super.getDirectionTo(other);
-        if (isNeighbor(other))
-            return super.getDirectionTo(other);
-        else
-            return Arrays.stream(Direction.values())
-                    .map(this::getNeighbor)
-                    .filter(e -> e instanceof Portal)
-                    .map(e -> ((Portal) e).getOut())
-                    .filter(e -> e.isNeighbor(other))
-                    .findFirst()
-                    .orElseThrow(IllegalStateException::new)
-                    .getDirectionTo(other);
+
+        return Arrays.stream(Direction.values())
+                .map(this::getNeighbor)
+                .filter(e -> e instanceof Portal)
+                .map(e -> ((Portal) e).getOut())
+                .filter(e -> e.isNeighbor(other))
+                .findFirst()
+                .orElseThrow(IllegalStateException::new)
+                .getDirectionTo(other);
     }
 }
