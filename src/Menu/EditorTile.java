@@ -2,10 +2,15 @@ package Menu;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
-import model.*;
-
-import java.util.HashMap;
+import model.Portal;
+import model.ShadowWall;
+import model.Space;
+import model.Wall;
+import model.SnakeHead;
+import model.SnakeBodyPart;
 import java.util.Map;
 
 public class EditorTile extends StackPane {
@@ -13,33 +18,38 @@ public class EditorTile extends StackPane {
     public final int Y;
     private ImageView tileImage;
     private int clickCounter = -1;
-    public EditorTile(double height, double width, int x, int y) {
+    public EditorTile(double height, double width, int x, int y, Map<Class, Image> textureMap) {
         X = x;
         Y = y;
-        textures = new HashMap<Class, Image>() {{
-//            put(Apple.class, new Image("./apple.png", width, height, false, false));
-            put(Wall.class, new Image("./wall.png", width, height, false, false));
-            put(ShadowWall.class, new Image("./shadowWall.png", width, height, false, false));
-            put(Space.class, new Image("./space.png", width, height, false, false));
-//            put(Mushroom.class, new Image("./mushroom.png", width, height, false, false));
-            put(SnakeHead.class, new Image("./blueHeadStraight.png", width, height, false, false));
-            put(SnakeBodyPart.class, new Image("./blueBodyStraight.png", width, height, false, false));
-            put(Portal.class, new Image("./portal.png", width, height, false, false));
-        }};
+        textures = textureMap;
         tileImage = new ImageView();
         updateImage();
         getChildren().add(tileImage);
-        setOnMouseClicked(e -> updateImage());
+        setOnMouseClicked(this::handleClick);
     }
+
+    private void handleClick(MouseEvent e){
+        if (e.getButton() == MouseButton.SECONDARY) {
+            resetImage();
+        } else {
+            updateImage();
+        }
+    }
+
     private Map<Class, Image> textures;
 
     private static Class[] typeOrder =
-            new Class[]{Space.class, Wall.class, ShadowWall.class, SnakeHead.class, SnakeBodyPart.class, Portal.class};
+            new Class[]{Space.class, Wall.class, ShadowWall.class, Portal.class, SnakeHead.class, SnakeBodyPart.class};
 
-    private void updateImage(){
+    public void updateImage(){
         clickCounter++;
         if (clickCounter == typeOrder.length)
             clickCounter = 0;
+        tileImage.setImage(textures.get(typeOrder[clickCounter]));
+    }
+
+    public void resetImage(){
+        clickCounter = 0;
         tileImage.setImage(textures.get(typeOrder[clickCounter]));
     }
 

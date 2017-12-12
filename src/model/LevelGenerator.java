@@ -107,13 +107,29 @@ public final class LevelGenerator {
         return result;
     }
 
+//    public static void addLevel(String levelRepresentation){
+////        levelsRepresentations.add(levelRepresentation);
+////        levels.add(getLevel(levels.size()));
+////    }
+////
+////    public static Level getLevel(int number) {
+////        val map = parseLevel(levelsRepresentations.get(number));
+////        val snake = (SnakeHead) map.findFirst(SnakeHead.class);
+////        val snakeBody = (SnakeBodyPart) map.findFirst(SnakeBodyPart.class);
+////
+////        if (!snake.isNeighbor(snakeBody))
+////            throw new IllegalArgumentException("Body is not in contact with head");
+////
+////        snake.getBody().add(snakeBody);
+////        return new Level(map, snake, Config.getApplesCount(number));
+////    }
     public static void addLevel(String levelRepresentation){
+        levels.add(getLevel(levels.size(), levelRepresentation));
         levelsRepresentations.add(levelRepresentation);
-        levels.add(getLevel(levels.size()));
     }
 
-    public static Level getLevel(int number) {
-        val map = parseLevel(levelsRepresentations.get(number));
+    public static Level getLevel(int number, String levelRepresentation) {
+        val map = parseLevel(levelRepresentation);
         val snake = (SnakeHead) map.findFirst(SnakeHead.class);
         val snakeBody = (SnakeBodyPart) map.findFirst(SnakeBodyPart.class);
 
@@ -123,6 +139,11 @@ public final class LevelGenerator {
         snake.getBody().add(snakeBody);
         return new Level(map, snake, Config.getApplesCount(number));
     }
+
+    public static Level getLevel(int number) {
+        return getLevel(number, levelsRepresentations.get(number));
+    }
+
 
     private LevelGenerator() {
     }
